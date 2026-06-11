@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fashion Hub</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, sans-serif;
+        }
+
+        body{
+            background:#f5f5f5;
+        }
+
+        /* Navbar */
+        .navbar{
+            background:#111827;
+            color:white;
+            padding:15px 40px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        .logo{
+            font-size:24px;
+            font-weight:bold;
+            color:#00e5ff;
+        }
+
+        .nav-links a{
+            color:white;
+            text-decoration:none;
+            margin:0 10px;
+        }
+
+        .search-box{
+            padding:8px;
+            border:none;
+            border-radius:5px;
+        }
+
+        /* Hero */
+        .hero{
+            height:350px;
+            background:white;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            text-align:center;
+        }
+
+        .hero h1{
+            font-size:50px;
+            margin-bottom:10px;
+        }
+
+        .hero p{
+            font-size:20px;
+            margin-bottom:20px;
+        }
+
+        .btn{
+            background:#00e5ff;
+            padding:12px 25px;
+            text-decoration:none;
+            color:black;
+            border-radius:8px;
+            font-weight:bold;
+        }
+
+        /* Products */
+        .products-title{
+            text-align:center;
+            margin:30px 0;
+        }
+
+        .product-container{
+            width:90%;
+            margin:auto;
+            display:grid;
+            grid-template-columns:repeat(4,1fr);
+            gap:25px;
+            padding-bottom:40px;
+        }
+
+        .card{
+            background:white;
+            border-radius:12px;
+            overflow:hidden;
+            box-shadow:0 2px 10px rgba(0,0,0,0.1);
+            transition:0.3s;
+        }
+
+        .card:hover{
+            transform:translateY(-5px);
+        }
+
+        .card img{
+            width:100%;
+            height:280px;
+            object-fit:cover;
+        }
+
+        .card-content{
+            padding:15px;
+        }
+
+        .card-content h3{
+            margin-bottom:10px;
+        }
+
+        .price{
+            color:green;
+            font-weight:bold;
+            font-size:18px;
+        }
+
+        /* Footer */
+        .footer{
+            background:#111827;
+            color:white;
+            text-align:center;
+            padding:25px;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">FASHION HUB</div>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/men/">Men</a>
+        <a href="/women/">Women</a>
+        <a href="/add/">Add Product</a>
+    </div>
+
+    <form method="GET">
+        <input type="text" name="search" placeholder="Search Product" class="search-box">
+    </form>
+
+</nav>
+
+<div class="hero">
+    <h1>Discover Your Style</h1>
+    <p>Latest Fashion Trends For Men & Women</p>
+    <a href="/products/" class="btn">Shop Now</a>
+</div>
+
+<h2 class="products-title">Latest Products</h2>
+
+<div class="product-container">
+
+{% for product in products %}
+
+<a href="/product/{{ product.id }}/" style="text-decoration:none;color:black;">
+
+    <div class="card">
+
+        <img src="{{ product.image.url }}" alt="{{ product.title }}">
+
+        <div class="card-content">
+
+            <h3>{{ product.title }}</h3>
+
+            <p class="price">₹ {{ product.price }}</p>
+
+            <p>{{ product.category }}</p>
+
+        </div>
+
+    </div>
+
+</a>
+
+{% empty %}
+
+<h2>No Products Available</h2>
+
+{% endfor %}
+
+</div>
+
+<footer class="footer">
+    <h2>FASHION HUB</h2>
+    <p>Best Fashion Store For Men & Women</p>
+</footer>
+<h2>Cart Items</h2>
+
+{% for item in cart_items %}
+    <p>{{ item.product.title }} - ₹{{ item.product.price }}</p>
+{% endfor %}
+</body>
+</html>

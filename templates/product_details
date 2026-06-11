@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ product.title }}</title>
+
+    <style>
+        body{
+            font-family:Arial;
+            background:#f4f4f4;
+            padding:30px;
+            text-align:center;
+        }
+
+        .box{
+            background:white;
+            max-width:600px;
+            margin:auto;
+            padding:20px;
+            border-radius:15px;
+        }
+
+        img{
+            width:300px;
+            border-radius:15px;
+        }
+
+        button{
+            background:#111827;
+            color:white;
+            border:none;
+            padding:12px 20px;
+            border-radius:8px;
+            cursor:pointer;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="box">
+
+    <img src="{{ product.image.url }}">
+
+    <h1>{{ product.title }}</h1>
+
+    <h2>₹ {{ product.price }}</h2>
+
+    <h3>{{ product.category }}</h3>
+
+    <button>Add To Cart</button>
+
+    <br><br>
+
+    <a href="/">⬅ Back To Home</a>
+
+</div>
+
+</body>
+</html>

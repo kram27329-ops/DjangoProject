@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>Create Account</title>
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#00c853,#00bfa5,#00e5ff);
+background-size:400% 400%;
+animation:bg 10s infinite alternate;
+}
+
+@keyframes bg{
+0%{background-position:left;}
+100%{background-position:right;}
+}
+
+.container{
+width:420px;
+padding:35px;
+background:rgba(255,255,255,0.15);
+backdrop-filter:blur(15px);
+border-radius:20px;
+box-shadow:0 8px 32px rgba(0,0,0,0.3);
+text-align:center;
+color:white;
+}
+
+h1{
+margin-bottom:20px;
+}
+
+input{
+width:100%;
+padding:14px;
+margin:10px 0;
+border:none;
+border-radius:10px;
+outline:none;
+}
+
+button{
+width:100%;
+padding:14px;
+background:white;
+color:#00bfa5;
+font-weight:bold;
+border:none;
+border-radius:10px;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+transform:scale(1.05);
+}
+
+a{
+color:white;
+text-decoration:none;
+font-weight:bold;
+} </style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>🚀 Create Account</h1>
+
+<form action="/" method="get">
+
+<input type="text" placeholder="Full Name" required>
+
+<input type="email" placeholder="Email Address" required>
+
+<input type="password" placeholder="Password" required>
+
+<input type="password" placeholder="Confirm Password" required>
+
+<button type="submit">Create Account</button>
+
+</form>
+
+<br>
+
+<a href="/">Already have an account? Login</a>
+
+</div>
+
+</body>
+</html>
