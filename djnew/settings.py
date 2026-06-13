@@ -19,6 +19,8 @@ ALLOWED_HOSTS = ["*"]
 
 # ---------------- APPS ----------------
 INSTALLED_APPS = [
+     'cloudinary',
+    'cloudinary_storage',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -92,9 +94,6 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # WhiteNoise config (important for Render)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# ---------------- MEDIA FILES ----------------
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
 
 # ⚠️ NOTE:
 # Render-la media files serve panna static() alone NOT enough
