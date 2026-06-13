@@ -12,11 +12,12 @@ SECRET_KEY = os.getenv(
     "django-insecure-a-rmn)rk152^tt^yv$b5r-qeo3w^*08^r1(obp$q*f-53s7eo#"
 )
 
+# ⚡ IMPORTANT: Render-safe DEBUG
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = ["*"]
 
-
+# ---------------- APPS ----------------
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -28,10 +29,9 @@ INSTALLED_APPS = [
     'shop',
 ]
 
-
+# ---------------- MIDDLEWARE ----------------
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -42,10 +42,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
 ROOT_URLCONF = 'djnew.urls'
 
-
+# ---------------- TEMPLATES ----------------
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -61,10 +60,9 @@ TEMPLATES = [
     },
 ]
 
-
 WSGI_APPLICATION = 'djnew.wsgi.application'
 
-
+# ---------------- DATABASE ----------------
 DATABASES = {
     "default": dj_database_url.config(
         default=os.getenv("DATABASE_URL"),
@@ -73,7 +71,7 @@ DATABASES = {
     )
 }
 
-
+# ---------------- AUTH ----------------
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -81,24 +79,31 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-
+# ---------------- INTERNATIONAL ----------------
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Kolkata'
-
 USE_I18N = True
 USE_TZ = True
 
-
+# ---------------- STATIC FILES ----------------
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# WhiteNoise config (important for Render)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# ---------------- MEDIA FILES ----------------
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# ⚠️ NOTE:
+# Render-la media files serve panna static() alone NOT enough
+# Cloudinary recommended for production (next step if still 404)
 
+# ---------------- LOGIN ----------------
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
 
-
+# ---------------- DEFAULT ----------------
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
