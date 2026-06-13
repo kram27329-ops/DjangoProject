@@ -1,20 +1,22 @@
 from pathlib import Path
 import os
-import dj_database_url 
+import dj_database_url
 from dotenv import load_dotenv
+
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SECRET_KEY = os.getenv(
+    "SECRET_KEY",
+    "django-insecure-a-rmn)rk152^tt^yv$b5r-qeo3w^*08^r1(obp$q*f-53s7eo#"
+)
 
-# ================= SECURITY =================
-SECRET_KEY = 'django-insecure-a-rmn)rk152^tt^yv$b5r-qeo3w^*08^r1(obp$q*f-53s7eo#'
-
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = ["*"]
 
-# ================= INSTALLED APPS =================
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -27,9 +29,11 @@ INSTALLED_APPS = [
 ]
 
 
-# ================= MIDDLEWARE =================
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -39,11 +43,9 @@ MIDDLEWARE = [
 ]
 
 
-# ================= URL CONFIG =================
 ROOT_URLCONF = 'djnew.urls'
 
 
-# ================= TEMPLATES =================
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -60,22 +62,18 @@ TEMPLATES = [
 ]
 
 
-# ================= WSGI =================
 WSGI_APPLICATION = 'djnew.wsgi.application'
 
 
-# ================= DATABASE =================
 DATABASES = {
- "default": dj_database_url.config(
-default=os.getenv("DATABASE_URL"),
-conn_max_age=600,
-ssl_require=True  # Render PostgreSQL requires SSL
-   	 )
+    "default": dj_database_url.config(
+        default=os.getenv("DATABASE_URL"),
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
 
 
-
-# ================= PASSWORD VALIDATION =================
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -84,7 +82,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# ================= LANGUAGE / TIME =================
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Kolkata'
 
@@ -92,27 +89,16 @@ USE_I18N = True
 USE_TZ = True
 
 
-# ================= STATIC FILES =================
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-
-# ================= MEDIA FILES =================
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
-# ================= LOGIN SYSTEM =================
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
 
 
-# ================= MESSAGES (IMPORTANT FOR SIGNUP) =================
-from django.contrib.messages import constants as messages
-
-MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
-
-MESSAGE_TAGS = {
-    messages.ERROR: 'danger',
-    messages.SUCCESS: 'success',
-}
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
