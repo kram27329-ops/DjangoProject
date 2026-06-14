@@ -1,6 +1,9 @@
 from pathlib import Path
 import os
 import dj_database_url
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -29,6 +32,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'shop',
+     'cloudinary',
+    'cloudinary_storage',
 ]
 
 # ---------------- MIDDLEWARE ----------------
