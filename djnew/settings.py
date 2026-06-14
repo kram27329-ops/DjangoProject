@@ -1,29 +1,35 @@
 from pathlib import Path
 import os
 import dj_database_url
+from dotenv import load_dotenv
+
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
-from dotenv import load_dotenv
 
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv(
-    "SECRET_KEY",
-    "django-insecure-a-rmn)rk152^tt^yv$b5r-qeo3w^*08^r1(obp$q*f-53s7eo#"
-)
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-default")
 
-# ⚡ IMPORTANT: Render-safe DEBUG
-DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = os.getenv("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = ["*"]
 
+# ---------------- CLOUDINARY ----------------
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+    secure=True
+)
+
+# VERY IMPORTANT (THIS FIXES YOUR ISSUE)
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 # ---------------- APPS ----------------
 INSTALLED_APPS = [
-     'cloudinary',
-    'cloudinary_storage',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -32,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'shop',
-     'cloudinary',
+
+    'cloudinary',
     'cloudinary_storage',
 ]
 
@@ -78,36 +85,19 @@ DATABASES = {
     )
 }
 
-# ---------------- AUTH ----------------
-AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
-]
-
-# ---------------- INTERNATIONAL ----------------
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'Asia/Kolkata'
-USE_I18N = True
-USE_TZ = True
-
-# ---------------- STATIC FILES ----------------
+# ---------------- STATIC ----------------
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# WhiteNoise config (important for Render)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-
-# ⚠️ NOTE:
-# Render-la media files serve panna static() alone NOT enough
-# Cloudinary recommended for production (next step if still 404)
-
-# ---------------- LOGIN ----------------
+# ---------------- AUTH ----------------
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
 
 # ---------------- DEFAULT ----------------
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

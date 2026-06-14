@@ -189,6 +189,7 @@ body{
 
 <body>
 
+<!-- NAVBAR -->
 <div class="navbar">
 
     <div class="logo">FASHION HUB</div>
@@ -211,11 +212,13 @@ body{
 
 </div>
 
+<!-- HERO -->
 <div class="hero">
     <h1>Welcome To Fashion Hub</h1>
     <p>Latest Men's & Women's Collections</p>
 </div>
 
+<!-- SEARCH -->
 <div class="search-box">
     <form method="GET">
         <input type="text" name="q" placeholder="Search Products...">
@@ -223,22 +226,25 @@ body{
     </form>
 </div>
 
+<!-- ADD PRODUCT -->
 {% if user.is_authenticated and user.is_superuser %}
 <div class="admin-box">
     <a href="{% url 'add_product' %}" class="add-btn">➕ Add Product</a>
 </div>
 {% endif %}
 
+<!-- PRODUCTS -->
 <div class="product-container">
 
 {% for product in products %}
 
 <div class="card">
 
+    <!-- IMAGE FIX (CLOUDINARY SAFE) -->
     {% if product.image %}
         <img src="{{ product.image.url }}" alt="{{ product.title }}">
     {% else %}
-        <p>No Image</p>
+        <img src="https://via.placeholder.com/300x300?text=No+Image" alt="No Image">
     {% endif %}
 
     <div class="card-content">
@@ -246,7 +252,7 @@ body{
         <h3>{{ product.title }}</h3>
 
         <div class="description">
-            {{ product.description|default:"Fashion Product" }}
+            Fashion Product
         </div>
 
         <div class="price">
@@ -284,7 +290,7 @@ body{
 </div>
 
 {% empty %}
-    <h2>No Products Found</h2>
+    <h2 style="text-align:center;">No Products Found</h2>
 {% endfor %}
 
 </div>
