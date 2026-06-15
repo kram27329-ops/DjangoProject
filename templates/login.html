@@ -34,6 +34,7 @@
             margin-bottom:15px;
             border:1px solid #ccc;
             border-radius:8px;
+            box-sizing:border-box;
         }
 
         button{
@@ -67,6 +68,13 @@
             text-align:center;
             margin-bottom:10px;
         }
+
+        .admin-note{
+            text-align:center;
+            font-size:13px;
+            color:#666;
+            margin-bottom:10px;
+        }
     </style>
 </head>
 
@@ -76,7 +84,6 @@
 
     <h2>Login</h2>
 
-    <!-- 🔥 ERROR SHOW -->
     {% if error %}
         <p class="error">{{ error }}</p>
     {% endif %}
@@ -84,15 +91,39 @@
     <form method="POST">
         {% csrf_token %}
 
-        <input type="text" name="username" placeholder="Username" required>
+        <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            required
+        >
 
-        <input type="password" name="password" placeholder="Password" required>
+        <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+        >
 
-        <button type="submit">Login</button>
+        <!-- Admin Secret Code -->
+        <input
+            type="text"
+            name="admin_code"
+            placeholder="Admin Secret Code (Admins Only)"
+        >
+
+        <p class="admin-note">
+            Normal users can leave this empty.
+        </p>
+
+        <button type="submit">
+            Login
+        </button>
     </form>
 
     <div class="link">
-        Don't have account? <a href="/signup/">Signup</a>
+        Don't have account?
+        <a href="/signup/">Signup</a>
     </div>
 
 </div>

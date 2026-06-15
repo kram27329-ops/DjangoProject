@@ -3,16 +3,15 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden
+from django.conf import settings
+
 
 from .models import Product, Cart
 from .forms import ProductForm
 
-
-# ================= HOME =================
 def home(request):
     products = Product.objects.all()
     return render(request, 'home.html', {'products': products})
-
 
 # ================= PRODUCT DETAIL =================
 def product_detail(request, id):
@@ -45,20 +44,42 @@ def signup(request):
 
     return render(request, 'signup.html')
 
-
 # ================= LOGIN =================
 def login_view(request):
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
+        admin_code = request.POST.get('admin_code', '')
 
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(
+            request,
+            username=username,
+            password=password
+        )
 
         if user:
+
+            # Admin secret code check
+            if user.is_superuser:
+                if admin_code != settings.ADMIN_SECRET_CODE:
+                    return render(
+                        request,
+                        'login.html',
+                        {
+                            'error': 'Invalid Admin Secret Code'
+                        }
+                    )
+
             login(request, user)
             return redirect('home')
 
-        return render(request, 'login.html', {'error': 'Invalid credentials'})
+        return render(
+            request,
+            'login.html',
+            {
+                'error': 'Invalid Username or Password'
+            }
+        )
 
     return render(request, 'login.html')
 
