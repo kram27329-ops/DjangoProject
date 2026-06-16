@@ -18,27 +18,28 @@ def product_detail(request, id):
     product = get_object_or_404(Product, id=id)
     return render(request, 'product_details.html', {'product': product})
 
-
 # ================= SIGNUP =================
 def signup(request):
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
-        role = request.POST.get('role', 'user')
 
         if User.objects.filter(username=username).exists():
-            return render(request, 'signup.html', {'error': 'User already exists'})
+            return render(
+                request,
+                'signup.html',
+                {'error': 'User already exists'}
+            )
 
-        user = User.objects.create_user(username=username, password=password)
+        user = User.objects.create_user(
+            username=username,
+            password=password
+        )
 
-        if role == "admin":
-            user.is_superuser = True
-            user.is_staff = True
-        else:
-            user.is_superuser = False
-            user.is_staff = False
-
+        user.is_superuser = False
+        user.is_staff = False
         user.save()
+
         login(request, user)
         return redirect('home')
 
