@@ -77,6 +77,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'djnew.wsgi.application'
 
 # ---------------- DATABASE ----------------
+
 DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get("DATABASE_URL"),
@@ -84,7 +85,6 @@ DATABASES = {
         ssl_require=True
     )
 }
-
 # ---------------- STATIC ----------------
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'

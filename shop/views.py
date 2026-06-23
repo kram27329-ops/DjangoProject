@@ -5,18 +5,25 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden
 from django.conf import settings
 
-
 from .models import Product, Cart
 from .forms import ProductForm
 
+
+# ================= HOME =================
 def home(request):
     products = Product.objects.all()
-    return render(request, 'home.html', {'products': products})
+    is_admin = request.user.is_authenticated and request.user.is_superuser
+    return render(request, 'home.html', {
+        'products': products,
+        'is_admin': is_admin
+    })
+
 
 # ================= PRODUCT DETAIL =================
 def product_detail(request, id):
     product = get_object_or_404(Product, id=id)
     return render(request, 'product_details.html', {'product': product})
+
 
 # ================= SIGNUP =================
 def signup(request):
@@ -25,17 +32,9 @@ def signup(request):
         password = request.POST.get('password')
 
         if User.objects.filter(username=username).exists():
-            return render(
-                request,
-                'signup.html',
-                {'error': 'User already exists'}
-            )
+            return render(request, 'signup.html', {'error': 'User already exists'})
 
-        user = User.objects.create_user(
-            username=username,
-            password=password
-        )
-
+        user = User.objects.create_user(username=username, password=password)
         user.is_superuser = False
         user.is_staff = False
         user.save()
@@ -44,9 +43,10 @@ def signup(request):
         return redirect('home')
 
     return render(request, 'signup.html')
+
+
 # ================= LOGIN =================
 def login_view(request):
-
     if request.method == "POST":
 
         role = request.POST.get('role')
@@ -54,39 +54,24 @@ def login_view(request):
         password = request.POST.get('password')
         admin_code = request.POST.get('admin_code', '')
 
-        user = authenticate(
-            request,
-            username=username,
-            password=password
-        )
+        user = authenticate(request, username=username, password=password)
 
         if user:
 
-            # Admin option select pannirundha
             if role == "admin":
-
                 if not user.is_superuser:
-                    return render(
-                        request,
-                        'login.html',
-                        {'error': 'You are not an Admin'}
-                    )
+                    return render(request, 'login.html', {'error': 'You are not Admin'})
 
                 if admin_code != settings.ADMIN_SECRET_CODE:
-                    return render(
-                        request,
-                        'login.html',
-                        {'error': 'Invalid Admin Secret Code'}
-                    )
+                    return render(request, 'login.html', {'error': 'Invalid Admin Code'})
+
+                login(request, user)
+                return redirect('admin_dashboard')
 
             login(request, user)
             return redirect('home')
 
-        return render(
-            request,
-            'login.html',
-            {'error': 'Invalid Username or Password'}
-        )
+        return render(request, 'login.html', {'error': 'Invalid credentials'})
 
     return render(request, 'login.html')
 
@@ -146,15 +131,14 @@ def add_to_cart(request, id):
 
     cart_item, created = Cart.objects.get_or_create(
         user=request.user,
-        product=product
+        product=product,
+        defaults={'quantity': 1}
     )
 
     if not created:
         cart_item.quantity += 1
-    else:
-        cart_item.quantity = 1
+        cart_item.save()
 
-    cart_item.save()
     return redirect('cart')
 
 
@@ -162,7 +146,6 @@ def add_to_cart(request, id):
 @login_required
 def cart(request):
     items = Cart.objects.filter(user=request.user)
-
     total = sum(item.product.price * item.quantity for item in items)
 
     return render(request, 'cart.html', {
