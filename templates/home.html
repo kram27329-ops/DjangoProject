@@ -238,55 +238,46 @@ body{
 }
 
 </style>
-
 </head>
-
 <body>
+</div>   <!-- navbar close -->
 
-<!-- NAVBAR -->
-<div class="navbar">
-
-    <div class="logo">FASHION HUB</div>
-
-    <div class="nav-links">
-
-        <a href="{% url 'home' %}">Home</a>
-        <a href="{% url 'men_products' %}">Men</a>
-        <a href="{% url 'women_products' %}">Women</a>
-        <a href="{% url 'cart' %}">Cart</a>
-
-        {% if user.is_authenticated %}
-            <a href="{% url 'logout' %}">Logout</a>
-        {% else %}
-            <a href="{% url 'login' %}">Login</a>
-            <a href="{% url 'signup' %}">Signup</a>
-        {% endif %}
-
-    </div>
-
-</div>
-
-<!-- HERO -->
-<div class="hero">
-    <h1>Welcome To Fashion Hub</h1>
-    <p>Latest Men's & Women's Collections</p>
-</div>
-
-<!-- SEARCH -->
-<div class="search-box">
-    <form method="GET">
-        <input type="text" name="q" placeholder="Search Products...">
-        <button type="submit">Search</button>
-    </form>
-</div>
-
-<!-- ADD PRODUCT -->
 {% if user.is_authenticated and user.is_superuser %}
 <div class="admin-box">
-    <a href="{% url 'add_product' %}" class="add-btn">➕ Add Product</a>
+    <a href="{% url 'add_product' %}" class="add-btn">
+        ➕ Add Product
+    </a>
 </div>
 {% endif %}
 
+<div class="product-container">
+{% if user.is_authenticated %}
+
+    {% if user.is_superuser %}
+        <span style="color:#22c55e;font-weight:bold;">
+            👑 Admin : {{ user.username }}
+        </span>
+    {% else %}
+        <span style="color:#00e5ff;font-weight:bold;">
+            👤 User : {{ user.username }}
+        </span>
+    {% endif %}
+
+    <a href="{% url 'logout' %}">Logout</a>
+
+{% else %}
+    <a href="{% url 'login' %}">Login</a>
+    <a href="{% url 'signup' %}">Signup</a>
+{% endif %}
+</div>
+
+{% if user.is_authenticated and user.is_superuser %}
+<div class="admin-box">
+    <a href="{% url 'add_product' %}" class="add-btn">
+        ➕ Add Product
+    </a>
+</div>
+{% endif %}
 <!-- PRODUCTS -->
 <div class="product-container">
 
