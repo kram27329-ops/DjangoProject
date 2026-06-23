@@ -28,15 +28,23 @@
             color:#111827;
         }
 
-        input{
-            width:100%;
-            padding:12px;
-            margin-bottom:15px;
-            border:1px solid #ccc;
-            border-radius:8px;
-            box-sizing:border-box;
-        }
+       input{
+    width:100%;
+    padding:12px;
+    margin-bottom:15px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    box-sizing:border-box;
+}
 
+select{
+    width:100%;
+    padding:12px;
+    margin-bottom:15px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    box-sizing:border-box;
+}
         button{
             width:100%;
             padding:12px;
@@ -90,6 +98,11 @@
 
     <form method="POST">
         {% csrf_token %}
+<select name="role" id="role">
+    <option value="user">User Login</option>
+    <option value="admin">Admin Login</option>
+</select>
+
 
         <input
             type="text"

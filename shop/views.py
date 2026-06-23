@@ -44,10 +44,12 @@ def signup(request):
         return redirect('home')
 
     return render(request, 'signup.html')
-
 # ================= LOGIN =================
 def login_view(request):
+
     if request.method == "POST":
+
+        role = request.POST.get('role')
         username = request.POST.get('username')
         password = request.POST.get('password')
         admin_code = request.POST.get('admin_code', '')
@@ -60,15 +62,21 @@ def login_view(request):
 
         if user:
 
-            # Admin secret code check
-            if user.is_superuser:
+            # Admin option select pannirundha
+            if role == "admin":
+
+                if not user.is_superuser:
+                    return render(
+                        request,
+                        'login.html',
+                        {'error': 'You are not an Admin'}
+                    )
+
                 if admin_code != settings.ADMIN_SECRET_CODE:
                     return render(
                         request,
                         'login.html',
-                        {
-                            'error': 'Invalid Admin Secret Code'
-                        }
+                        {'error': 'Invalid Admin Secret Code'}
                     )
 
             login(request, user)
@@ -77,9 +85,7 @@ def login_view(request):
         return render(
             request,
             'login.html',
-            {
-                'error': 'Invalid Username or Password'
-            }
+            {'error': 'Invalid Username or Password'}
         )
 
     return render(request, 'login.html')
