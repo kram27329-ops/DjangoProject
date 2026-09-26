@@ -11,6 +11,7 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# ---------------- CORE ----------------
 SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-default")
 
 DEBUG = os.getenv("DEBUG", "True") == "True"
@@ -25,10 +26,10 @@ cloudinary.config(
     secure=True
 )
 
-# VERY IMPORTANT (THIS FIXES YOUR ISSUE)
+# MEDIA STORAGE (Cloudinary)
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-# ---------------- APPS ----------------
+# ---------------- INSTALLED APPS ----------------
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -76,16 +77,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'djnew.wsgi.application'
 
-# ---------------- DATABASE ----------------
-
+# ---------------- DATABASE (POSTGRESQL - RENDER READY) ----------------
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get("DATABASE_URL"),
+        default=os.getenv("DATABASE_URL"),
         conn_max_age=600,
         ssl_require=True
     )
 }
-# ---------------- STATIC ----------------
+
+# ---------------- STATIC FILES ----------------
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
@@ -98,4 +99,6 @@ LOGOUT_REDIRECT_URL = '/login/'
 
 # ---------------- DEFAULT ----------------
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ---------------- ADMIN SECRET ----------------
 ADMIN_SECRET_CODE = "RAMADMIN2026"

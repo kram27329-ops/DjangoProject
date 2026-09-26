@@ -12,10 +12,14 @@ from .forms import ProductForm
 # ================= HOME =================
 def home(request):
     products = Product.objects.all()
-    is_admin = request.user.is_authenticated and request.user.is_superuser
+
+    form = None
+    if request.user.is_authenticated and request.user.is_superuser:
+        form = ProductForm()
+
     return render(request, 'home.html', {
         'products': products,
-        'is_admin': is_admin
+        'form': form,
     })
 
 
@@ -60,21 +64,29 @@ def login_view(request):
 
             if role == "admin":
                 if not user.is_superuser:
-                    return render(request, 'login.html', {'error': 'You are not Admin'})
+                    return render(request, 'login.html', {
+                        'error': 'You are not Admin'
+                    })
 
                 if admin_code != settings.ADMIN_SECRET_CODE:
-                    return render(request, 'login.html', {'error': 'Invalid Admin Code'})
+                    return render(request, 'login.html', {
+                        'error': 'Invalid Admin Code'
+                    })
 
                 login(request, user)
-                return redirect('admin_dashboard')
 
+                # Admin login success -> Home Page
+                return redirect('home')
+
+            # Normal user login
             login(request, user)
             return redirect('home')
 
-        return render(request, 'login.html', {'error': 'Invalid credentials'})
+        return render(request, 'login.html', {
+            'error': 'Invalid credentials'
+        })
 
     return render(request, 'login.html')
-
 
 # ================= LOGOUT =================
 def logout_view(request):
@@ -88,14 +100,14 @@ def add_product(request):
     if not request.user.is_superuser:
         return HttpResponseForbidden("Admin only")
 
-    form = ProductForm(request.POST or None, request.FILES or None)
+    if request.method == "POST":
+        form = ProductForm(request.POST, request.FILES)
 
-    if form.is_valid():
-        form.save()
-        return redirect('home')
+        if form.is_valid():
+            form.save()
+            return redirect('home')
 
-    return render(request, 'add_product.html', {'form': form})
-
+    return redirect('home')
 
 # ================= EDIT PRODUCT =================
 @login_required
