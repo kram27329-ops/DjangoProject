@@ -97,6 +97,7 @@ select{
 
     <form method="POST">
         {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
 <select name="role" id="role">
     <option value="user">User Login</option>
     <option value="admin">Admin Login</option>

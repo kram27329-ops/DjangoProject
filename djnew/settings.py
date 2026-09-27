@@ -3,32 +3,22 @@ import os
 import dj_database_url
 from dotenv import load_dotenv
 
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
-
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# ---------------- CORE ----------------
 SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-default")
 
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = ["*"]
 
-# ---------------- CLOUDINARY ----------------
-cloudinary.config(
-    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
-    api_key=os.getenv("CLOUDINARY_API_KEY"),
-    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
-    secure=True
-)
+# ---------------- MEDIA ----------------
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
-# VERY IMPORTANT (THIS FIXES YOUR ISSUE)
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-# ---------------- APPS ----------------
+# ---------------- INSTALLED APPS ----------------
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -38,9 +28,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'shop',
-
-    'cloudinary',
-    'cloudinary_storage',
 ]
 
 # ---------------- MIDDLEWARE ----------------
@@ -77,15 +64,24 @@ TEMPLATES = [
 WSGI_APPLICATION = 'djnew.wsgi.application'
 
 # ---------------- DATABASE ----------------
+DATABASE_URL = os.getenv("DATABASE_URL")
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            ssl_require=True
+        )
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get("DATABASE_URL"),
-        conn_max_age=600,
-        ssl_require=True
-    )
-}
-# ---------------- STATIC ----------------
+# ---------------- STATIC FILES ----------------
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
@@ -98,4 +94,6 @@ LOGOUT_REDIRECT_URL = '/login/'
 
 # ---------------- DEFAULT ----------------
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ---------------- ADMIN SECRET ----------------
 ADMIN_SECRET_CODE = "RAMADMIN2026"

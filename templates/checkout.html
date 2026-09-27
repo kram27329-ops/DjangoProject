@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Checkout - Fashion Hub</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial,sans-serif;
+        }
+
+        body{
+            background:#f4f6f9;
+        }
+
+        .navbar{
+            background:#111827;
+            color:white;
+            padding:15px 40px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        .logo{
+            font-size:24px;
+            font-weight:bold;
+            color:#00e5ff;
+        }
+
+        .home-btn{
+            color:white;
+            text-decoration:none;
+            font-weight:bold;
+        }
+
+        .container{
+            width:90%;
+            max-width:900px;
+            margin:30px auto;
+            display:flex;
+            gap:30px;
+        }
+
+        .order-summary{
+            flex:1;
+            background:white;
+            padding:25px;
+            border-radius:12px;
+            box-shadow:0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .delivery-form{
+            flex:1;
+            background:white;
+            padding:25px;
+            border-radius:12px;
+            box-shadow:0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h2{
+            color:#111827;
+            margin-bottom:20px;
+        }
+
+        .item-row{
+            display:flex;
+            gap:12px;
+            align-items:center;
+            padding:10px 0;
+            border-bottom:1px solid #eee;
+        }
+
+        .item-row img{
+            width:60px;
+            height:60px;
+            object-fit:cover;
+            border-radius:8px;
+        }
+
+        .item-info h4{
+            margin-bottom:3px;
+        }
+
+        .item-info .price{
+            color:green;
+            font-weight:bold;
+        }
+
+        .total-bar{
+            margin-top:20px;
+            padding-top:15px;
+            border-top:2px solid #111827;
+            font-size:20px;
+            font-weight:bold;
+            text-align:right;
+        }
+
+        input, textarea{
+            width:100%;
+            padding:12px;
+            margin-bottom:15px;
+            border:1px solid #ccc;
+            border-radius:8px;
+            box-sizing:border-box;
+            font-size:15px;
+        }
+
+        input:focus, textarea:focus{
+            border-color:#2563eb;
+            outline:none;
+            box-shadow:0 0 5px rgba(37,99,235,0.3);
+        }
+
+        textarea{
+            resize:none;
+            height:80px;
+        }
+
+        label{
+            font-weight:bold;
+            display:block;
+            margin-bottom:5px;
+            color:#333;
+        }
+
+        .place-btn{
+            width:100%;
+            background:#22c55e;
+            color:white;
+            border:none;
+            padding:14px;
+            border-radius:8px;
+            font-size:17px;
+            cursor:pointer;
+            margin-top:5px;
+        }
+
+        .place-btn:hover{
+            background:#16a34a;
+        }
+
+        .error{
+            color:red;
+            text-align:center;
+            margin-bottom:15px;
+            font-weight:bold;
+        }
+
+        .back-link{
+            display:block;
+            text-align:center;
+            margin-top:15px;
+            color:#2563eb;
+            text-decoration:none;
+            font-weight:bold;
+        }
+
+        @media(max-width:768px){
+            .container{
+                flex-direction:column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <div class="logo">FASHION HUB</div>
+    <a href="{% url 'cart' %}" class="home-btn">← Back to Cart</a>
+</div>
+
+<div class="container">
+
+    <!-- ORDER SUMMARY -->
+    <div class="order-summary">
+        <h2>🧾 Order Summary</h2>
+
+        {% for item in items %}
+        <div class="item-row">
+            <img src="{{ item.product.image.url }}" alt="{{ item.product.title }}">
+            <div class="item-info">
+                <h4>{{ item.product.title }}</h4>
+                <p class="price">₹{{ item.product.price }} × {{ item.quantity }}</p>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="total-bar">
+            Total: ₹{{ total }}
+        </div>
+    </div>
+
+    <!-- DELIVERY FORM -->
+    <div class="delivery-form">
+        <h2>📦 Delivery Details</h2>
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <label>Full Name</label>
+            <input type="text" name="full_name" placeholder="Your full name" required>
+
+            <label>Phone Number</label>
+            <input type="tel" name="phone" placeholder="10-digit mobile number" required>
+
+            <label>Delivery Address</label>
+            <textarea name="address" placeholder="House no, Street, Area..." required></textarea>
+
+            <label>City</label>
+            <input type="text" name="city" placeholder="City name" required>
+
+            <label>Pincode</label>
+            <input type="text" name="pincode" placeholder="6-digit pincode" required>
+
+            <button type="submit" class="place-btn">
+                Place Order ✅
+            </button>
+        </form>
+
+        <a href="{% url 'cart' %}" class="back-link">← Back to Cart</a>
+    </div>
+
+</div>
+
+</body>
+</html>

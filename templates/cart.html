@@ -78,6 +78,16 @@
 
 <h1>🛒 My Cart</h1>
 
+{% if messages %}
+{% for message in messages %}
+<div style="background:{% if message.tags == 'success' %}#d1fae5{% elif message.tags == 'error' %}#fee2e2{% else %}#dbeafe{% endif %};
+    color:{% if message.tags == 'success' %}#065f46{% elif message.tags == 'error' %}#991b1b{% else %}#1e40af{% endif %};
+    padding:12px 20px; border-radius:8px; margin-bottom:15px; text-align:center; font-weight:bold;">
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+
 {% for item in items %}
 
 <div class="box">
@@ -117,6 +127,10 @@
 </div>
 
 <a href="/" class="btn">Continue Shopping</a>
+
+{% if items %}
+<a href="{% url 'checkout' %}" class="btn" style="background:#22c55e; margin-left:10px;">Proceed to Checkout ✅</a>
+{% endif %}
 
 </body>
 </html>
